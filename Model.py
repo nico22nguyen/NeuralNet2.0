@@ -42,10 +42,3 @@ class Model:
       # show actual vs expected
       print('expected_result: ', expected_result)
       print('actual_result: ', actual_result)
-
-  
-
-
-
-
-
