@@ -11,16 +11,8 @@ class Layer:
     self.current_input = None
     self.pre_activation_result = None
 
-    # default activation is none
-    self.activation = utils.identity
-    self.d_activation = utils.identity
-
-    if (activation == 'tanh'):
-      self.activation = utils.tanh
-      self.d_activation = utils.d_tanh
-    elif (activation == 'relu'):
-      self.activation = utils.relu
-      self.d_activation = utils.d_relu
+    # determine activation function
+    self.activation, self.d_activation = get_activations_by_name(activation)
 
   def forward_pass(self, _input: list):
     self.current_input = _input
@@ -46,3 +38,12 @@ class Layer:
 
     # tack this layer's weights onto running gradient and return
     return np.dot(new_running_gradient, self.weights)
+
+def get_activations_by_name(activation_name):
+  if (activation_name == 'tanh'):
+    return (utils.tanh, utils.d_tanh)
+  if (activation_name == 'relu'):
+    return (utils.relu, utils.d_relu)
+  if (activation_name == 'softmax'):
+    return (utils.softmax, utils.d_softmax)
+  return (utils.identity, utils.identity)
