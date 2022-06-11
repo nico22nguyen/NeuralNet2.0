@@ -14,3 +14,6 @@ def relu(x):
 
 def d_relu(x):
   return 1 if x > 0 else 0
+
+def mean_squared_error(A, B):
+  return (np.square(A - B)).mean(axis=1)
