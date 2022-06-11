@@ -1,4 +1,4 @@
-from utils import mean_squared_error
+from utils import squared_error
 from Layer import Layer
 
 class Model:
@@ -29,7 +29,7 @@ class Model:
       actual_result = self.evaluate(input)
 
       # compute loss of result vs expected
-      loss = mean_squared_error(actual_result, expected_result)
+      loss = squared_error(actual_result, expected_result)
 
       # perform gradient descent
       self.gradient_descent(loss)

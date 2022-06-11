@@ -15,7 +15,7 @@ def relu(x):
 def d_relu(x):
   return 1 if x > 0 else 0
 
-def mean_squared_error(A, B):
+def squared_error(A, B):
   return np.square(np.subtract(A,  B))
 
 # TODO: np.exp and np.sum can be trivially combined into one loop as an optimization
