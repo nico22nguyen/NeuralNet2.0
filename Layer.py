@@ -3,6 +3,7 @@ import utils
 
 class Layer:
   def __init__(self, num_neurons: int, num_inputs: int, activation: str):
+    # gaussian distribution of weights and biases
     self.weights = np.random.randn(num_neurons, num_inputs)
     self.biases = np.random.randn(num_neurons)
 
