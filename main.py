@@ -2,7 +2,9 @@ from keras.datasets import mnist
 import numpy as np
 
 from Model import Model
-from Layer import Layer
+from Layers.Fully_Connected import Fully_Connected
+from Layers.Relu import Relu
+from Layers.Sigmoid import Sigmoid
 from utils import one_hot
 
 # load data
@@ -23,8 +25,12 @@ test_Y = [one_hot(vect, 10) for vect in test_Y_raw]
 
 # create model
 model = Model()
-model.add_layer(Layer(100, INPUT_SIZE, 'relu'))
-model.add_layer(Layer(10, 100, 'sigmoid'))
+model.add_layer(Fully_Connected(INPUT_SIZE, 100))
+model.add_layer(Relu())
+model.add_layer(Fully_Connected(100, 10))
+model.add_layer(Sigmoid())
 
-model.train(train_X, train_Y, test_X, test_Y)
+for i in range(10):
+  model.train(train_X, train_Y, test_X, test_Y)
+
 model.test(test_X, test_Y)

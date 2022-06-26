@@ -53,3 +53,8 @@ def categorical_ce(labels, actual, epsilon=1e-5):
 def d_categorical_ce(labels, actual, epsilon=1e-5):
   return -(labels / (actual + epsilon))
   
+def mean_squared_error(labels, actual):
+  return np.linalg.norm((labels - actual) ** 2)
+
+def d_mean_squared_error(labels, actual):
+  return 2 * (labels - actual)
