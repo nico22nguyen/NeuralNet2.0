@@ -13,7 +13,7 @@ def relu(x):
   return np.maximum(x, 0)
 
 def d_relu(x):
-  return 1 if x > 0 else 0
+  return (np.maximum(x, 0) == x) * 1
 
 def squared_error(A, B):
   return np.square(np.subtract(A,  B))
@@ -23,7 +23,7 @@ def softmax(x):
   exponentiated = np.exp(x)
   sum = np.sum(exponentiated)
 
-  return [exp / sum for exp in exponentiated]
+  return exponentiated / sum
 
 def d_softmax(x):
   update_vectors = []
@@ -38,5 +38,18 @@ def d_softmax(x):
   # sum all the updates and return the derivative vector
   return np.sum(update_vectors, axis=0)
 
+def sigmoid(x):
+  return 1 / (1 + np.exp(x))
+
+def d_sigmoid(x):
+  return sigmoid(x) * (1 - sigmoid(x))
+
 def one_hot(value, total_values):
-  return [1 if i == value else 0 for i in range(total_values)]
+  return np.array([1 if i == value else 0 for i in range(total_values)])
+
+def categorical_ce(labels, actual, epsilon=1e-5): 
+  return labels * (-np.log(actual + epsilon)) + (1 - labels) * (-np.log(1 - actual + epsilon))
+
+def d_categorical_ce(labels, actual, epsilon=1e-5):
+  return -(labels / (actual + epsilon))
+  

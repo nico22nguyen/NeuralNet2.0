@@ -4,8 +4,8 @@ import utils
 class Layer:
   def __init__(self, num_neurons: int, num_inputs: int, activation: str):
     # gaussian distribution of weights and biases
-    self.weights = np.random.randn(num_neurons, num_inputs)
-    self.biases = np.random.randn(num_neurons)
+    self.weights = np.random.randn(num_inputs, num_neurons)
+    self.biases = np.random.randn(1, num_neurons)
 
     # used to simplify back-propagation
     self.current_input = None
@@ -16,8 +16,7 @@ class Layer:
 
   def forward_pass(self, _input: list):
     self.current_input = _input
-    self.pre_activation_result = np.dot(self.weights, _input) + self.biases
-
+    self.pre_activation_result = _input @ self.weights + self.biases
     return self.activation(self.pre_activation_result)
 
   # returns new "running gradient"
@@ -26,18 +25,21 @@ class Layer:
     activation_gradient = self.d_activation(self.pre_activation_result)
 
     # tack activation gradient onto running gradient
-    new_running_gradient = np.dot(running_gradient, activation_gradient)
+    new_running_gradient = activation_gradient * running_gradient
 
     # calculate gradients for weights and biases
-    d_weights = np.dot(new_running_gradient, self.current_input)
+    d_weights = self.current_input.T @ new_running_gradient
     d_biases = new_running_gradient
 
+    # tack on weights to running gradient
+    new_running_gradient = new_running_gradient @ self.weights.T
+
     # adjust weights and biases
-    self.weights = self.weights - d_weights
-    self.biases = self.biases - d_biases
+    self.weights = self.weights - d_weights * 0.001
+    self.biases = self.biases - d_biases * 0.001
 
     # tack this layer's weights onto running gradient and return
-    return np.dot(new_running_gradient, self.weights)
+    return new_running_gradient
 
 def get_activations_by_name(activation_name):
   if (activation_name == 'tanh'):
@@ -46,4 +48,6 @@ def get_activations_by_name(activation_name):
     return (utils.relu, utils.d_relu)
   if (activation_name == 'softmax'):
     return (utils.softmax, utils.d_softmax)
+  if (activation_name == 'sigmoid'):
+    return (utils.sigmoid, utils.d_sigmoid)
   return (utils.identity, utils.identity)
